@@ -5,7 +5,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
-	"log"
 	"math"
 	"math/rand"
 	"os"
@@ -139,7 +138,7 @@ func LoadModel(checkpoint, tokenizer string) (*Model, error) {
 	return NewModel(file, tokfile)
 }
 
-func (m *Model) Inference(prompt string, temperature float32, seed int64, steps int32) string {
+func (m *Model) Inference(prompt string, temperature float32, seed int64, steps int32) (string, error) {
 	rd := rand.New(rand.NewSource(seed))
 
 	// create and init the application RunState
@@ -158,7 +157,7 @@ func (m *Model) Inference(prompt string, temperature float32, seed int64, steps 
 	// process the prompt, if any
 	promptTokens, err := bpeEncode(prompt, m.vocab, m.vocabScores, m.maxTokenLength)
 	if err != nil {
-		log.Fatalln("Unable to encode prompt", err)
+		return "", err
 	}
 
 	// start the main loop
@@ -213,7 +212,7 @@ func (m *Model) Inference(prompt string, temperature float32, seed int64, steps 
 		}
 	}
 
-	return strings.Join(results, "")
+	return strings.Join(results, ""), nil
 }
 
 func allocWeights(w *TransformerWeights, p *Config) {

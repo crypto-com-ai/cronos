@@ -12,15 +12,11 @@ import (
 	"github.com/ethereum/go-ethereum/core/vm"
 )
 
+const DefaultTemperature = 0.8
+
 var (
 	llamaABI             abi.ABI
 	llamaContractAddress = common.BytesToAddress([]byte{103})
-
-	//go:embed llama/stories15M.bin
-	stories []byte
-
-	//go:embed llama/tokenizer.bin
-	tokenizer []byte
 )
 
 func init() {
@@ -69,6 +65,9 @@ func (lc *LLamaContract) Run(evm *vm.EVM, contract *vm.Contract, readonly bool) 
 	prompt := args[0].(string)
 	seed := args[1].(int64)
 	steps := args[2].(int32)
-	res := lc.model.Inference(prompt, 1.0, seed, steps)
+	res, err := lc.model.Inference(prompt, DefaultTemperature, seed, steps)
+	if err != nil {
+		return nil, err
+	}
 	return method.Outputs.Pack(res)
 }

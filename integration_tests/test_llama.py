@@ -9,7 +9,7 @@ def test_call(cronos):
     contract = deploy_contract(w3, CONTRACTS["TestLLama"])
     prompt = "say hello"
     seed = 2
-    steps = 256
+    steps = 128
     data = {"from": addr, "gasPrice": w3.eth.gas_price, "gas": 600000}
     tx = contract.functions.inference(prompt, seed, steps).build_transaction(data)
     receipt = send_transaction(w3, tx)
@@ -20,17 +20,10 @@ def test_call(cronos):
     rspprompt, rsp = eth_abi.decode(("string", "string"), receipt.logs[0].data)
     assert rspprompt == prompt
     assert rsp == (
-        "say helloeymy and Mabel. She was sock. Suddenled. piram the child, "
-        "she was called out of adventure came over there. The little Because. Jim "
-        "croak filter back down the child stepped in the small legs she was aunt to "
-        "sign and she and around her eyes! icy her clung and saw the second.\nThe "
-        "corner of her name - had gone. She flever.\nTen way and she had become a "
-        "lotion'dled again. Symbol started feeling filled the two, even heard. recogn "
-        "reached for a bro welcome child with gates that she asked her head to the "
-        "headdled, the old mistake.\nOne knee forward.\nLittle feet called in return "
-        "again. LSpace. She was a piece of his name: her furryed: a wooden become the "
-        "Mouse to shower warmly, her heart.\nInodedded towards the mouse mock was a "
-        "disagreak.\nHer home.\nThe rossy hazoint a second, she was.\nNow, mesint "
-        "telling Coraed “His and Joe had come from top. The gifted heart and she "
-        "noticed the stroked heart, so many little child.\nMatt."
+        "say hello Joe and the Zoe, who was ate their favour.\nTweed woke. He was the "
+        'next. 3. He was one flately before him. Tom and his best friend.\nBeeped - "I '
+        "would lent and the beginning todden. He was 8 with a run.\nEvery day that day "
+        'and a story time.\nThe next. He said, "Every day.\nThe go handed out marched, '
+        "he loved and he was a ladder. Everyone would prepare. He looked around him "
+        "glown towards the other-th him.\nThe"
     )
